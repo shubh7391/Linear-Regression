@@ -1,0 +1,81 @@
+import numpy as np 
+import pandas as pd 
+import matplotlib.pyplot as plt 
+import seaborn as sns 
+from ipywidgets import interact 
+data=p data.head()  
+d.read_csv('data.csv') 
+data.isnull().sum() 
+data['label'].value_count 
+#checking summary for all the crops 
+print("Average ratio of nitroge in soil: {0:.2f}".format(data['N'].mean())) print("Average ratio of Phosphorus in soil: {0:.2f}".format(data['P'].mean())) print("Average ratio of Pottassium in soil: {0:.2f}".format(data['K'].mean())) print("Average temperature in soil: {0:.2f}".format(data['temperature'].mean())) print("Average humidity in soil: {0:.2f}".format(data['humidity'].mean())) print("Average ph in soil: {0:.2f}".format(data['ph'].mean())) 
+print("Avera #summary statics for each of the crops 
+@interact 
+def summary(crops=list(data['label'].value_counts().index)): 
+x=data[data['label']==crops] 
+print("------------------------------------------------------")
+print("statics for nitrogen") 
+print("minimum nitrogen required:",x['N'].min())  print("average nitrogen required:",x['N'].mean())  print("maximun nitrogen required:",x['N'].max())  print("-------------------------------------------------------")  print("statics for phosphorus") 
+print("minimum phosphorus required:",x['P'].min())  print("average phosphorus required:",x['P'].mean())  print("maximun phosphorus required:",x['P'].max())  print("--------------------------------------------------------") 
+print("statics for pottasium") 
+print("minimum pottasium required:",x['K'].min())  print("average pottasium required:",x['K'].mean())  print("maximun pottasium required:",x['K'].max())  print("----------------------------------------------------------") 
+print("statics for Temperatur") 
+print("minimum temperature required:",x['temperature'].min())  print("average temperature required:",x['temperature'].mean())  print("maximun temperature required:",x['temperature'].max())  print("-----------------------------------------------------------") 
+print("statics for Humidity") 
+print("minimum humidity required:",x['humidity'].min())  print("average humidity required:",x['humidity'].mean())  print("maximun humidity required:",x['humidity'].max())  print("---------------------------------------------------------") 
+print("statics for ph") 
+print("minimum ph required:",x['ph'].min())
+print("average ph required:",x['ph'].mean())  print("maximun ph required:",x['ph'].max())  print("----------------------------------------------------------")  print("statics for rainfall") 
+print("minimum rainfall required:",x['rainfall'].min())  print("average rainfall required:",x['rainfall'].mean())  print("maximun rainfall required:",x['rainfall'].max())  print("-----------------------------------------------------------") 
+ge rainfall: {0:.2f}".format(data['rainfall'].mean())) ts() plt.subplot(2,4,1) 
+sns.distplot(data['N'],color='darkblue') 
+plt.xlabel('Ratio of Nitrogen',fontsize=12) 
+plt.grid() 
+plt.subplot(2,4,2) 
+sns.distplot(data['P'],color='black') 
+plt.xlabel('Ratio of Phosphorus',fontsize=12) plt.grid() 
+plt.subplot(2,4,3) 
+sns.distplot(data['K'],color='green') 
+plt.xlabel('Ratio of Pottasium',fontsize=12) plt.grid()
+plt.subplot(2,4,4) 
+sns.distplot(data['temperature'],color='yellow') plt.xlabel('Rratio of temperature',fontsize=12) plt.grid() 
+plt.subplot(2,4,5) 
+sns.distplot(data['humidity'],color='red') plt.xlabel('Ratio of humdidity',fontsize=12) plt.grid() 
+plt.subplot(2,4,6) 
+sns.distplot(data['ph'],color='green') plt.xlabel('Ratio of ph',fontsize=12) 
+plt.grid() 
+plt.subplot(2,4,7) 
+sns.distplot(data['rainfall'],color='brown') plt.xlabel('Ratio of rainfall',fontsize=12)
+plt.grid() 
+plt.suptitle('Distribution Of agricultural conditions') 
+plt.show() 
+print("summer crops") 
+print(data[(data['temperature'] > 30)& (data['humidity'] > 50)]['label'].unique()) print("winter crops") 
+print(data[(data['temperature']< 20) & (data['humidity'] > 30)]['label'].unique()) print("rainy season crops") 
+print(data[data['rainfall'] > 200]['label'].unique()) 
+#splitting the dataset for predictive modelling storing lable in y named variable and rest data  set in x named variable  
+y=data['label'] 
+x=data.drop(['label'],axis=1) 
+print("Shape of x:",x.shape) 
+print("Shape of y:",y.shape) 
+from sklearn.model_selection import train_test_split 
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.2,random_state=0) print("the shape of x train",x_train.shape) 
+print("the shape of y train",y_train.shape) 
+print("the shape of x test",x_test.shape) 
+print("the shape of y test",y_test.shape) 
+#creating a predictive model 
+from sklearn.linear_model import LogisticRegression 
+model=LogisticRegression() 
+model.fit(x_train,y_train) 
+y_pred=model.predict(x_test)
+from sklearn.metrics import confusion_matrix 
+#printing confusionmatrix first 
+plt.rcParams['figure.figsize']=(10,10) 
+cm=confusion_matrix(y_test,y_pred) 
+sns.heatmap(cm,annot=True,cmap='Wistia') 
+plt.title('Confusion Matrix for logistic Regression',fontsize=15) plt.show() 
+#classification report 
+from sklearn.metrics import classification_report cr = classification_report(y_test,y_pred) 
+print(cr) 
+prediction=model.predict((np.array([[91,43,40,19,80,7,200]])))   
+print("suggested crop:",prediction)
